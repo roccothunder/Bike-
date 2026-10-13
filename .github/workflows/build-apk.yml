@@ -16,8 +16,10 @@ jobs:
           java-version: '17'
       - name: Prepare Android SDK
         run: |
-          echo "SDK location: ${ANDROID_HOME:-${ANDROID_SDK_ROOT:-unknown}}"
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          set -e
+          SDK_BIN="$(find "${ANDROID_HOME}/cmdline-tools" -type f -name sdkmanager | head -n 1)"
+          test -n "$SDK_BIN"
+          "$SDK_BIN" "platforms;android-35" "build-tools;35.0.0"
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
